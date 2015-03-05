@@ -11,10 +11,11 @@ $(usage)"}"
 }
 
 usage() {
+    local command="${BASH_SOURCE[0]}"
     echo "\
 Usage:
-    bin/ticky start
-    bin/ticky remaining
+    $command start
+    $command remaining
 "
 }
 
