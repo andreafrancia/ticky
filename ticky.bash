@@ -3,35 +3,66 @@
 ticky_main() {
     local command="${1:?"no command
 $(usage)"}"
-    ticky_start
+    case "$1" in
+    start) ticky_start;;
+    remaining) ticky_remaining;;
+    *) usage ;;
+    esac
 }
 
 usage() {
     echo "\
 Usage:
     bin/ticky start
+    bin/ticky remaining
 "
 }
 
+ticky_remaining() {
+    local end="$(cat 2>/dev/null <~/.ticky/end)"
+    local now="$(ticky_now)"
+    local now_in_seconds="$(ticky_date_to_seconds "$now")"
+    local end_in_seconds="$(ticky_date_to_seconds "$end")"
+
+    local remaining=$((end_in_seconds - now_in_seconds))
+    local mins=$((remaining / 60))
+    local secs=$((remaining % 60))
+    echo "$(printf "%02d:%02d" $mins $secs)"
+}
+
 ticky_start() {
-    ticky_save_start "$(ticky_now)" "$((25*60))"
+    local start="$(ticky_now)"
+    local duration="$((25*60))" 
+    local end="$(ticky_date_add_duration "$start" "$duration")"
+    ticky_save_start "$start" "$duration" "$end"
+}
+
+ticky_date_add_duration() {
+    local start="$1"
+    local duration="$2"
+
+    local start_in_seconds="$(ticky_date_to_seconds "$start")"
+    local end_in_seconds="$((start_in_seconds+duration))"
+
+    ticky_date_from_seconds "$end_in_seconds"
 }
 
 ticky_save_start() {
     local start="$1"
     local duration="$2"
+    local end="$3"
 
     mkdir -p ~/.ticky
     echo "$start"    >| ~/.ticky/start
     echo "$duration" >| ~/.ticky/duration
+    echo "$end"      >| ~/.ticky/end
 }
 
-
-uuid() {
-    python -c 'import uuid; print(str(uuid.uuid4()))'
+ticky_date_from_seconds() {
+    date -r "$1" +%Y-%m-%dT%T%z
 }
 
-in_seconds() {
+ticky_date_to_seconds() {
     date -jf %Y-%m-%dT%T%z "$1" +%s
 }
 
@@ -40,35 +71,7 @@ ticky_now() {
 }
 
 ___() {
-current="$(cat 2>/dev/null <~/.ticks/current)"
-current="${current:-"$(uuid)"}"
-echo "$current" >| ~/.ticks/current
-
-echo current=$current
-date="$(now)"
-
-if [[ --start == "$1" ]]; then
-    duration="$((25*60))"
-    mkdir -p ~/.ticks
-    echo "$current started_at $date" > ~/.ticks/event-"$date"-0
-    echo "$current duration $duration" > ~/.ticks/event-"$date"-1
-    echo "$date" > ~/.ticks/last_start
-    echo "$duration" > ~/.ticks/last_start_duration
-elif [[ --completed == "$1" ]]; then
-    mkdir -p ~/.ticks
-    rm ~/.ticks/last_start
     echo "$current completed_at $date" > ~/.ticks/event-"$date"
-elif [[ --remaining == "$1" ]]; then
-    last_start="$(cat 2>/dev/null <~/.ticks/last_start)"
-    duration="$(cat 2>/dev/null <~/.ticks/last_start_duration)"
-    last_start_in_seconds="$(in_seconds "$last_start")"
-    now_in_seconds="$(in_seconds "$date")"
-    elapsed=$((now_in_seconds - last_start_in_seconds))
-    remaining=$((duration - elapsed))
-    mins=$((remaining / 60))
-    secs=$((remaining % 60))
-    echo "$(printf "%02d:%02d" $mins $secs)"
-fi
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
