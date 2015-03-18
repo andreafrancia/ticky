@@ -76,7 +76,7 @@ ___() {
 }
 
 ticky_run_test() {
-    false
+    true
 }
 
 if [[ "--test" == "$1" ]]; then
