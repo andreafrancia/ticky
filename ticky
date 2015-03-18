@@ -22,6 +22,12 @@ Usage:
 ticky_remaining() {
     local end="$(cat 2>/dev/null <~/.ticky/end)"
     local now="$(ticky_now)"
+    ticky_print_remaining "$end" "$now"
+}
+
+ticky_print_remaining() {
+    local end="$1"
+    local now="$2"
     local now_in_seconds="$(ticky_date_to_seconds "$now")"
     local end_in_seconds="$(ticky_date_to_seconds "$end")"
 
@@ -76,7 +82,7 @@ ___() {
 }
 
 ticky_run_test() {
-    true
+    test "00:00" == "$(ticky_print_remaining '2015-03-19T00:22:51+0100' '2015-03-19T00:22:51+0100')"
 }
 
 if [[ "--test" == "$1" ]]; then
