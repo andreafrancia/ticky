@@ -75,7 +75,13 @@ ___() {
     echo "$current completed_at $date" > ~/.ticks/event-"$date"
 }
 
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+ticky_run_test() {
+    false
+}
+
+if [[ "--test" == "$1" ]]; then
+    ticky_run_test
+elif [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     ticky_main "$@"
 fi
 
