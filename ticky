@@ -7,6 +7,7 @@ $(usage)"}"
     case "$1" in
     start) ticky_start;;
     remaining) ticky_remaining;;
+    squash) ticky_squash;;
     *) usage ;;
     esac
 }
@@ -17,6 +18,7 @@ usage() {
 Usage:
     $command start
     $command remaining
+    $command squash
 "
 }
 
@@ -81,6 +83,10 @@ ticky_save_start() {
 
 ticky_read_current_timer_end() {
     cat 2>/dev/null < "$TICKY_DIR/last/end"
+}
+
+ticky_squash() {
+    rm -f "$TICKY_DIR/last"
 }
 
 ticky_date_from_seconds() {
