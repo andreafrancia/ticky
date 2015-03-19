@@ -3,6 +3,7 @@
 ticky_main() {
     local command="${1:?"no command
 $(usage)"}"
+    TICKY_DIR=~/.ticky
     case "$1" in
     start) ticky_start;;
     remaining) ticky_remaining;;
@@ -20,7 +21,7 @@ Usage:
 }
 
 ticky_remaining() {
-    local end="$(cat 2>/dev/null <~/.ticky/end)"
+    local end="$(ticky_read_current_timer_end)"
     local now="$(ticky_now)"
     ticky_print_remaining "$end" "$now"
 }
@@ -63,10 +64,17 @@ ticky_save_start() {
     local duration="$2"
     local end="$3"
 
-    mkdir -p ~/.ticky
-    echo "$start"    >| ~/.ticky/start
-    echo "$duration" >| ~/.ticky/duration
-    echo "$end"      >| ~/.ticky/end
+    local timebox="$TICKY_DIR/$start"
+
+    mkdir -p "$timebox"
+    echo "$duration" >| "$timebox/duration"
+    echo "$end"      >| "$timebox/end"
+
+    ln -sf "$timebox" "$TICKY_DIR/last"
+}
+
+ticky_read_current_timer_end() {
+    cat 2>/dev/null < "$TICKY_DIR/last/end"
 }
 
 ticky_date_from_seconds() {
