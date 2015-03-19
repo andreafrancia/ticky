@@ -93,7 +93,7 @@ ticky_run_test() {
 }
 
 ticky_coffee() {
-    printf " \xe2\x98\x95\xef\xb8\x8f "
+    printf '!!! '
 }
 
 ticky_assert_equal() {
