@@ -6,7 +6,7 @@ $(usage)"}"
     TICKY_DIR=~/.ticky
     case "$1" in
     start) ticky_start;;
-    remaining) ticky_remaining;;
+    display) ticky_remaining;;
     squash) ticky_squash;;
     *) usage ;;
     esac
@@ -17,7 +17,7 @@ usage() {
     echo "\
 Usage:
     $command start
-    $command remaining
+    $command display
     $command squash
 "
 }
