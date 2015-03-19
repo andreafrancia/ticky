@@ -85,7 +85,13 @@ ___() {
     echo "$current completed_at $date" > ~/.ticks/event-"$date"
 }
 
+ticky_tests_failure() {
+    echo "FAIL"
+    exit 1
+}
+
 ticky_run_test() {
+    trap ticky_tests_failure ERR
     ticky_assert_equal "25:00" "$(ticky_print_remaining '2015-03-19T09:25:00+0100' '2015-03-19T09:00:00+0100')"
     ticky_assert_equal "10:00" "$(ticky_print_remaining '2015-03-19T09:25:00+0100' '2015-03-19T09:15:00+0100')"
     ticky_assert_equal "00:00" "$(ticky_print_remaining '2015-03-19T09:25:00+0100' '2015-03-19T09:25:00+0100')"
