@@ -95,10 +95,6 @@ ticky_now() {
     date -u +%Y-%m-%dT%T%z
 }
 
-___() {
-    echo "$current completed_at $date" > ~/.ticks/event-"$date"
-}
-
 ticky_tests_failure() {
     echo "FAIL"
     exit 1
