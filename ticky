@@ -36,7 +36,7 @@ ticky_print_remaining() {
         local now_in_seconds="$(ticky_date_to_seconds "$now")"
         local end_in_seconds="$(ticky_date_to_seconds "$end")"
 
-        local remaining=$((end_in_seconds - now_in_seconds))
+        local remaining="$((end_in_seconds - now_in_seconds))"
         if (( remaining < 0 )); then
             ticky_coffee
             local remaining="$((0-remaining))"
