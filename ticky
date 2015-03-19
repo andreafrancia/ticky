@@ -29,17 +29,22 @@ ticky_remaining() {
 ticky_print_remaining() {
     local end="$1"
     local now="$2"
-    local now_in_seconds="$(ticky_date_to_seconds "$now")"
-    local end_in_seconds="$(ticky_date_to_seconds "$end")"
 
-    local remaining=$((end_in_seconds - now_in_seconds))
-    if (( remaining < 0 )); then
+    if [[ "$end" == "" ]]; then
         ticky_coffee
-        local remaining=$((0-remaining))
+    else
+        local now_in_seconds="$(ticky_date_to_seconds "$now")"
+        local end_in_seconds="$(ticky_date_to_seconds "$end")"
+
+        local remaining=$((end_in_seconds - now_in_seconds))
+        if (( remaining < 0 )); then
+            ticky_coffee
+            local remaining=$((0-remaining))
+        fi
+        local mins=$((remaining / 60))
+        local secs=$((remaining % 60))
+        echo "$(printf "%02d:%02d" $mins $secs)"
     fi
-    local mins=$((remaining / 60))
-    local secs=$((remaining % 60))
-    echo "$(printf "%02d:%02d" $mins $secs)"
 }
 
 ticky_start() {
@@ -105,6 +110,7 @@ ticky_run_test() {
     ticky_assert_equal "10:00" "$(ticky_print_remaining '2015-03-19T09:25:00+0100' '2015-03-19T09:15:00+0100')"
     ticky_assert_equal "00:00" "$(ticky_print_remaining '2015-03-19T09:25:00+0100' '2015-03-19T09:25:00+0100')"
     ticky_assert_equal "$(ticky_coffee)00:01" "$(ticky_print_remaining '2015-03-19T09:25:00+0100' '2015-03-19T09:25:01+0100')"
+    ticky_assert_equal "$(ticky_coffee)" "$(ticky_print_remaining '' '2015-03-19T09:00:00+0100')"
 }
 
 ticky_coffee() {
