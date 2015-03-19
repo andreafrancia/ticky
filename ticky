@@ -70,6 +70,7 @@ ticky_save_start() {
     echo "$duration" >| "$timebox/duration"
     echo "$end"      >| "$timebox/end"
 
+    rm -f "$TICKY_DIR/last"
     ln -sf "$timebox" "$TICKY_DIR/last"
 }
 
