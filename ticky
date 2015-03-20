@@ -40,11 +40,17 @@ ticky_print_remaining() {
             ticky_coffee
             local remaining="$((0-remaining))"
         fi
-        local mins="$((remaining / 60))"
-        local secs="$((remaining % 60))"
-        printf "%02d:%02d" "$mins" "$secs"
+        ticky_format_interval "$remaining"
     fi
 }
+
+ticky_format_interval() {
+    local remaining="$1"
+    local mins="$((remaining / 60))"
+    local secs="$((remaining % 60))"
+    printf "%02d:%02d" "$mins" "$secs"
+}
+
 
 ticky_seconds_till_end()
 {
