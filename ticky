@@ -35,10 +35,7 @@ ticky_print_remaining() {
     if [[ "$end" == "" ]]; then
         ticky_coffee
     else
-        local now_in_seconds="$(ticky_date_to_seconds "$now")"
-        local end_in_seconds="$(ticky_date_to_seconds "$end")"
-
-        local remaining="$((end_in_seconds - now_in_seconds))"
+        local remaining="$(ticky_seconds_till_end "$now" "$end")"
         if (( remaining < 0 )); then
             ticky_coffee
             local remaining="$((0-remaining))"
@@ -47,6 +44,16 @@ ticky_print_remaining() {
         local secs="$((remaining % 60))"
         printf "%02d:%02d" "$mins" "$secs"
     fi
+}
+
+ticky_seconds_till_end()
+{
+    local now="$1"
+    local end="$2"
+    local now_in_seconds="$(ticky_date_to_seconds "$now")"
+    local end_in_seconds="$(ticky_date_to_seconds "$end")"
+
+    echo "$((end_in_seconds - now_in_seconds))"
 }
 
 ticky_start() {
