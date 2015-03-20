@@ -36,9 +36,7 @@ ticky_print_remaining() {
         ticky_coffee
     else
         local remaining="$(ticky_seconds_till_end "$now" "$end")"
-        if (( remaining < 0 )); then
-            ticky_coffee
-        fi
+        (( remaining >= 0 )) || ticky_coffee
         ticky_print_interval "$(ticky_absolute "$remaining")"
     fi
 }
