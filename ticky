@@ -38,16 +38,28 @@ ticky_print_remaining() {
         local remaining="$(ticky_seconds_till_end "$now" "$end")"
         if (( remaining < 0 )); then
             ticky_coffee
-            local remaining="$((0-remaining))"
         fi
-        ticky_format_interval "$remaining"
+        ticky_print_interval "$(ticky_absolute "$remaining")"
     fi
 }
 
-ticky_format_interval() {
-    local remaining="$1"
-    local mins="$((remaining / 60))"
-    local secs="$((remaining % 60))"
+ticky_absolute() {
+    local value="$1"
+    if (( value < 0 )); then
+        print "$((0-value))"
+    else
+        print "$value"
+    fi
+}
+
+print() {
+    printf "%s" "$1"
+}
+
+ticky_print_interval() {
+    local seconds="$1"
+    local mins="$((seconds / 60))"
+    local secs="$((seconds % 60))"
     printf "%02d:%02d" "$mins" "$secs"
 }
 
