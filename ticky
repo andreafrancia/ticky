@@ -97,6 +97,7 @@ ticky_save_start() {
     local timebox="$TICKY_DIR/$start"
 
     mkdir -p "$timebox"
+    echo "$start"    >| "$timebox/start"
     echo "$duration" >| "$timebox/duration"
     echo "$end"      >| "$timebox/end"
 
