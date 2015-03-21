@@ -101,8 +101,15 @@ ticky_save_start() {
     echo "$duration" >| "$timebox/duration"
     echo "$end"      >| "$timebox/end"
 
-    rm -f "$TICKY_DIR/last"
-    ln -sf "$timebox" "$TICKY_DIR/last"
+    link_forced "$timebox" "$(dirname "$timebox")/last"
+}
+
+link_forced() {
+    local src="$1"
+    local dst="$2"
+
+    rm -f "$dst"
+    ln -sf "$src" "$dst"
 }
 
 ticky_read_current_timer_end() {
