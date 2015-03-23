@@ -8,6 +8,10 @@ $(usage)"}"
     start) ticky_start;;
     display) ticky_remaining;;
     squash) ticky_squash;;
+    completed)
+        shift
+        ticky_completed "$@"
+        ;;
     *) usage ;;
     esac
 }
@@ -19,7 +23,16 @@ Usage:
     $command start
     $command display
     $command squash
+    $command completed
 "
+}
+
+ticky_completed() {
+    local now="$(ticky_now)"
+    local end="$now"
+    local duration="$((25*60))"
+    local start="$(ticky_date_add_duration "$end" $((-duration)))"
+    ticky_save_start "$start" "$duration" "$end"
 }
 
 ticky_remaining() {
