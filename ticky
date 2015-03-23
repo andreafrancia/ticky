@@ -5,7 +5,7 @@ ticky_main() {
 $(usage)"}"
     TICKY_DIR=~/.ticky
     case "$1" in
-    start) ticky_start;;
+    start) ticky_start ticky_save_start;;
     display) ticky_remaining;;
     squash) ticky_squash;;
     completed)
