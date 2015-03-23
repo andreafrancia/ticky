@@ -86,7 +86,7 @@ ticky_seconds_till_end()
 }
 
 ticky_start() {
-    local save_command="${1:-ticky_save_start}"
+    local save_command="$1"
     local start="$(ticky_now)"
     local duration="$((25*60))" 
     local end="$(ticky_date_add_duration "$start" "$duration")"
