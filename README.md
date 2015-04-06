@@ -2,19 +2,21 @@
 
 Ticky is a PROMPT embeddable timer.
 
-# Install
+# Quick Install
 
-Place the string <code>'$(~/path/to/ticky display)'</code> somewhere in your `PROMPT` or `RPROMPT`, for example:
-
+    # download
     git -C clone ~ https://github.com/andreafrancia/ticky.git
-    export RPROMPT='$(~/ticky/ticky display)'
+
+    # install
+    ln -sf $(pwd)/ticky /usr/local/bin
+
+    # use
+    export RPROMPT="$RPROMPT "'$(ticky display)'
 
 # Usage
 
-````
-$ ./ticky usage
-Usage:
-    ./ticky start
-    ./ticky display
-    ./ticky squash
-````
+    $ ./ticky usage
+    Usage:
+        ./ticky start
+        ./ticky display
+        ./ticky squash
