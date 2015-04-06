@@ -6,9 +6,8 @@ Ticky is a PROMPT embeddable timer.
 
 Place the string <code>'$(~/path/to/ticky display)'</code> somewhere in your `PROMPT` or `RPROMPT`, for example:
 
-````
-export RPROMPT="$cur_dir "'$(~/ticky/ticky display)'" "'$(git_cwd_info)'
-````
+    git -C clone ~ https://github.com/andreafrancia/ticky.git
+    export RPROMPT='$(~/ticky/ticky display)'
 
 # Usage
 
