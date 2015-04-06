@@ -12,6 +12,8 @@ $(usage)"}"
         shift
         ticky_completed "$@"
         ;;
+    list)
+        ticky_list;;
     *) usage ;;
     esac
 }
@@ -24,7 +26,16 @@ Usage:
     $command display
     $command squash
     $command completed
+    $command list
 "
+}
+
+ticky_list() {
+    for i in ~/.ticky/*; do
+        started="$(read_file "$i/start")"
+        duration_in_seconds="$(read_file "$i/duration")"
+        printf "%s %s\n" "$started" "$(ticky_print_interval $duration_in_seconds)"
+    done
 }
 
 ticky_completed() {
@@ -127,7 +138,11 @@ link_forced() {
 }
 
 ticky_read_current_timer_end() {
-    cat 2>/dev/null < "$TICKY_DIR/last/end"
+    read_file "$TICKY_DIR/last/end"
+}
+
+read_file() {
+    cat 2>/dev/null < "$1"
 }
 
 ticky_squash() {
